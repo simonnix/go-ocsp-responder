@@ -5,7 +5,7 @@ package main
 
 import (
 	"flag"
-	"gocsp-responder/responder"
+	"github.com/simonnix/go-ocsp-responder/pkg/responder"
 )
 
 func main() {

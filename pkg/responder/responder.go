@@ -16,14 +16,14 @@ import (
 	"encoding/pem"
 	"errors"
 	"fmt"
-	"gocsp-responder/crypto/ocsp"
-	"io/ioutil"
 	"log"
 	"math/big"
 	"net/http"
 	"os"
 	"strings"
 	"time"
+
+	"github.com/simonnix/go-ocsp-responder/pkg/ocsp"
 )
 
 type OCSPResponder struct {
@@ -190,7 +190,7 @@ func (self *OCSPResponder) getIndexEntry(s *big.Int) (*IndexEntry, error) {
 
 // parses a pem encoded x509 certificate
 func parseCertFile(filename string) (*x509.Certificate, error) {
-	ct, err := ioutil.ReadFile(filename)
+	ct, err := os.ReadFile(filename)
 	if err != nil {
 		return nil, err
 	}
@@ -204,7 +204,7 @@ func parseCertFile(filename string) (*x509.Certificate, error) {
 
 // parses a PEM encoded PKCS8 private key (RSA only)
 func parseKeyFile(filename string) (interface{}, error) {
-	kt, err := ioutil.ReadFile(filename)
+	kt, err := os.ReadFile(filename)
 	if err != nil {
 		return nil, err
 	}

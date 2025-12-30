@@ -185,7 +185,7 @@ var signatureAlgorithmDetails = []struct {
 }
 
 // TODO(rlb): This is also from crypto/x509, so same comment as AGL's below
-func signingParamsForPublicKey(pub interface{}, requestedSigAlgo x509.SignatureAlgorithm) (hashFunc crypto.Hash, sigAlgo pkix.AlgorithmIdentifier, err error) {
+func signingParamsForPublicKey(pub any, requestedSigAlgo x509.SignatureAlgorithm) (hashFunc crypto.Hash, sigAlgo pkix.AlgorithmIdentifier, err error) {
 	var pubType x509.PublicKeyAlgorithm
 
 	switch pub := pub.(type) {
@@ -323,7 +323,7 @@ type Request struct {
 func (req *Request) Marshal() ([]byte, error) {
 	hashAlg := getOIDFromHashAlgorithm(req.HashAlgorithm)
 	if hashAlg == nil {
-		return nil, errors.New("Unknown hash algorithm")
+		return nil, errors.New("request: unknown hash algorithm")
 	}
 	return asn1.Marshal(ocspRequest{
 		tbsRequest{
@@ -477,7 +477,7 @@ func ParseResponseForCert(bytes []byte, cert, issuer *x509.Certificate) (*Respon
 	}
 
 	var basicResp basicResponse
-	rest, err = asn1.Unmarshal(resp.Response.Response, &basicResp)
+	_, err = asn1.Unmarshal(resp.Response.Response, &basicResp)
 	if err != nil {
 		return nil, err
 	}
